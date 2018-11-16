@@ -23,27 +23,33 @@ def load_images(csv_path, img_path, expected_shape):
 
     for line in lines:
         center_image = np.array(cv2.imread(img_path +  line[0].split('/')[-1]))
-#         left_image   = np.array(cv2.imread(img_path +  line[1].split('/')[-1]))
-#         right_image  = np.array(cv2.imread(img_path +  line[2].split('/')[-1]))
+        # left_image   = np.array(cv2.imread(img_path +  line[1].split('/')[-1]))
+        # right_image  = np.array(cv2.imread(img_path +  line[2].split('/')[-1]))
+        # create adjusted steering measurements for the side camera images
 
-#         if (center_image.shape != expected_shape) or (left_image.shape != expected_shape) or (right_image.shape != expected_shape):
-#             continue
+
+        # if (center_image.shape != expected_shape) or (left_image.shape != expected_shape) or (right_image.shape != expected_shape):
+        #     continue
         if center_image.shape != expected_shape:
             continue
 
+        correction = 0.20 # this is a parameter to tune
+
+        angle = float(line[3])
+        # images.extend([center_image, left_image, right_image])
+        # measurements.extend([angle, angle + correction, angle - correction])
+
         images.append(center_image)
-        measurement = float(line[3])
-        print(measurement)
-        measurements.append(measurement)
+        measurements.append(angle)
 
     aug_images, aug_measurements = [], []
     for image, measurement in zip(images, measurements):
         aug_images.append(image)
         aug_measurements.append(measurement)
-        
+
         aug_images.append(cv2.flip(image, 1))
         aug_measurements.append(measurement*-1.0)
-        
+
     X_train = np.array(aug_images)
     y_train = np.array(aug_measurements)
 
@@ -60,13 +66,13 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    CSV_PATH = "./data/driving_log.csv"
-    IMG_PATH = "./data/IMG/"
+    CSV_PATH = "./clean_data/driving_log.csv"
+    IMG_PATH = "./clean_data/IMG/"
     img_shape = (160, 320, 3)
 
     X_train, y_train = load_images(CSV_PATH, IMG_PATH, img_shape)
 
-    
+
     early_stopper = EarlyStopping(patience=2)
     checkpointer = ModelCheckpoint(
         filepath="checkpoints/" + args.model_name + '.hdf5',
@@ -77,6 +83,6 @@ if __name__ == "__main__":
 
     model = loader.model
 
-    model.fit(X_train, y_train, callbacks=[early_stopper, checkpointer], epochs=50, validation_split=0.2, shuffle=True)
+    model.fit(X_train, y_train, callbacks=[early_stopper, checkpointer], epochs=50, validation_split=0.1, shuffle=True)
 
     model.save(args.model_name + ".h5")
