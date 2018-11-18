@@ -11,16 +11,6 @@ The goals / steps of this project are the following:
 * Summarize the results with a written report
 
 
-[//]: # (Image References)
-
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
-
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
@@ -34,7 +24,7 @@ My project includes the following files:
 * train.py containing the script to train the model
 * drive.py for driving the car in autonomous mode
 * nvidia_working.hdf5 containing a trained convolution neural network
-* writeup_report.md summarizing the results
+* README.md summarizing the results
 
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing
@@ -44,14 +34,14 @@ python drive.py nvidia_working.hdf5
 
 #### 3. Submission code is usable and readable
 
-
+model.py shows the various models I tried when developing the project. The file train.py calls these models and runs the training procedure.
 
 
 ### Model Architecture and Training Strategy
 
 #### 1. An appropriate model architecture has been employed
 
-The model.py file contains the code for training and saving the convolution neural network. The file shows the different networks I tried in the process of this project, a LeNet inspired network, and Nvidia's self driving network.
+The model.py file contains the code that defines the convolution neural network. The file shows the different networks I tried in the process of this project, a LeNet inspired network, and Nvidia's self driving network.
 
 The network starts with a transformation to the HSV color plane, to normalize the color information. then follows with BatchNormalization and cropping. The output of the "preprocessing" is then fed into a series of alternating 2D convolutional and dropout layers, after which it is flattened and fed into a series of alternating Dense and Dropout layers.
 
