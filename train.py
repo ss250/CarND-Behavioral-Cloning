@@ -22,7 +22,7 @@ def load_images(csv_path, img_path, expected_shape):
     measurements = []
 
     for line in lines:
-        center_image = np.array(cv2.imread(img_path +  line[0].split('/')[-1]))
+        center_image = np.array(cv2.imread(img_path +  line[0].split('/')[-1]))[...,::-1]
         # left_image   = np.array(cv2.imread(img_path +  line[1].split('/')[-1]))
         # right_image  = np.array(cv2.imread(img_path +  line[2].split('/')[-1]))
         # create adjusted steering measurements for the side camera images
